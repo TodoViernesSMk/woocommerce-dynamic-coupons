@@ -1,0 +1,19 @@
+.dynamic-coupons {
+  @import 'bootstrap/bootstrap';
+
+
+  .form-inline{
+    padding: 10px;
+    border-left: 5px #eee solid;
+    margin-bottom:5px;
+    cursor: move;
+  }
+
+  label{
+  margin-right:8px;
+}
+  #discounts{
+    margin-top:20px;
+
+  }
+}
