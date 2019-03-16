@@ -9,6 +9,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * Class DynamicCoupons
+ */
 class DynamicCoupons
 {
 
@@ -27,16 +30,24 @@ class DynamicCoupons
     }
 
 
+    /**
+     * Adds a new select box to coupon metabox
+     */
     function add_coupon_discount_dropdown()
     {
 
 
         $discounts = $this->get_discounts();
 
-        woocommerce_wp_select(array('id' => 'dynamic_discount', 'label' => __('Select Discount', 'woocommerce'), 'desc_tip' => 'Chose which discount bands you want to apply to this coupon', 'options' => $discounts));
+        woocommerce_wp_select(array('id' => 'dynamic_discount', 'label' => __('Select Dynamic Discount', 'dynamic-coupons'), 'description' => 'Chose which discount you want to apply to this coupon. You can create discounts under Products > Discounts', 'desc_tip' => true, 'options' => $discounts));
     }
 
 
+    /**
+     * @param $post_id
+     *
+     * Save the discount
+     */
     function save_coupon_discount_dropdown($post_id)
     {
         $dynamic_discount = isset($_POST['dynamic_discount']) ? $_POST['dynamic_discount'] : '';
@@ -44,6 +55,9 @@ class DynamicCoupons
     }
 
 
+    /**
+     * Plugin Assets
+     */
     public function register_admin_assets()
     {
         wp_enqueue_script('dc-admin', DC_ASSETS_PATH . 'js/admin.js', array('jquery'), '1.0.0', true);
@@ -51,6 +65,12 @@ class DynamicCoupons
 
     }
 
+
+    /**
+     * @return array
+     *
+     * Get a list of our discounts as an array for add_coupon_discount_dropdown()
+     */
     public function get_discounts()
     {
 
@@ -85,16 +105,26 @@ class DynamicCoupons
 
     }
 
+
+    /**
+     * @param $discount_types
+     * @return mixed
+     *
+     * Adds a new coupon type to WooCommerce
+     */
     public function custom_discount_type($discount_types)
     {
 
 
-        $discount_types["value_based_discount"] = __("Value Based Discount", 'dynamic-coupons');
+        $discount_types["value_based_discount"] = __("Value Based Dynamic Discount", 'dynamic-coupons');
 
         return $discount_types;
     }
 
 
+    /**
+     * Register discount CPT
+     */
     public function discount_init()
     {
 
@@ -107,7 +137,7 @@ class DynamicCoupons
             'attributes' => __('Item Attributes', 'dynamic-coupons'),
             'parent_item_colon' => __('Parent Item:', 'dynamic-coupons'),
             'all_items' => __('Discounts', 'dynamic-coupons'),
-            'add_new_item' => __('Add New Item', 'dynamic-coupons'),
+            'add_new_item' => __('Add New Discount', 'dynamic-coupons'),
             'add_new' => __('Add New', 'dynamic-coupons'),
             'new_item' => __('New Item', 'dynamic-coupons'),
             'edit_item' => __('Edit Item', 'dynamic-coupons'),
@@ -150,6 +180,15 @@ class DynamicCoupons
     }
 
 
+    /**
+     * @param $valid
+     * @param $product
+     * @param $coupon
+     * @param $values
+     * @return bool
+     *
+     * Checks if coupon is valid for this product
+     */
     function woocommerce_coupon_is_valid_for_product($valid, $product, $coupon, $values)
     {
 
@@ -160,8 +199,6 @@ class DynamicCoupons
 
         $product_cats = wp_get_post_terms($product->get_id(), 'product_cat', array("fields" => "ids"));
 
-
-        //var_dump( $coupon->product_ids );
 
         // Specific products get the discount
         if (sizeof($coupon->get_product_ids()) > 0) {
@@ -212,7 +249,17 @@ class DynamicCoupons
         return $valid;
     }
 
-//function to get coupon amount for "custom_discount"
+
+    /**
+     * @param $discount
+     * @param $discounting_amount
+     * @param $cart_item
+     * @param $single
+     * @param $coupon
+     * @return int
+     *
+     * Woo call to get coupon amount
+     */
     function woocommerce_coupon_get_discount_amount($discount, $discounting_amount, $cart_item, $single, $coupon)
     {
 
@@ -225,6 +272,9 @@ class DynamicCoupons
     }
 
 
+    /**
+     * Metabox for discounts
+     */
     function discount_meta_box_html()
     {
 
@@ -238,12 +288,19 @@ class DynamicCoupons
         include(DC_VIEWS_DIR . "metabox.php");
     }
 
+    /**
+     * Register Metabox for discounts
+     */
     function discount_meta_box_add()
     {
         add_meta_box("discount-rules", "Discount Rules", array($this, "discount_meta_box_html"), "dynamic_discounts", "advanced", "high", null);
     }
 
 
+
+    /**
+     * Save metabox
+     */
     function save_discount_meta_box($post_id, $post, $update)
     {
         if (!isset($_POST["discount-rules-nonce"]) || !wp_verify_nonce($_POST["discount-rules-nonce"], basename(__FILE__)))
@@ -274,6 +331,13 @@ class DynamicCoupons
     }
 
 
+    /**
+     * @param $cart_item
+     * @param $coupon
+     * @return float
+     *
+     * Work out the discount and return it
+     */
     function get_coupon_discount($cart_item, $coupon)
     {
 
@@ -287,11 +351,11 @@ class DynamicCoupons
 
 
         if (empty($discount_id)) {
-            return 0;
+            return 0.00;
         }
 
         if (empty($discounts)) {
-            return 0;
+            return 0.00;
         }
 
 
@@ -300,7 +364,7 @@ class DynamicCoupons
 
             if ($discount['min'] <= $line_total && $discount['max'] >= $line_total) {
 
-                return $discount['amount'];
+                return (float) number_format($discount['amount'], 2, '.', '');
                 break;
 
             }

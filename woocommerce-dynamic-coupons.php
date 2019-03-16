@@ -7,7 +7,7 @@ Version: 1.0
 Author: Webtronic
 Author URI: http://www.webtronic.ie
 License: A "Slug" license name e.g. GPL2
-
+Text Domain: dynamic-coupons
 WC requires at least: 3.0
 WC tested up to: 3.0
 */

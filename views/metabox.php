@@ -14,25 +14,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 
-    <div class="alert alert-warning">
-        <p>Discount rules are applied in the order below, so make sure your values are in order. You can drag and drop them to reorder. Click Update or Publish when finished.</p>
+    <div class="alert alert-info">
+        <p><?php _e('Discount rules are applied in the order below. You can drag and drop them to reorder. You can then link these discounts when creating a WooCommerce coupon.', 'dynamic-coupons');?></p>
     </div>
 
     <div id="discounts">
 
-       <?php foreach($discounts as $discount){?>
+       <?php
+       if(!empty($discounts)){
+       foreach($discounts as $discount){?>
 
         <div class="form-inline">
             <p>
-                <label>Min Amount:</label> <input type="text" placeholder="Min Amount" name="discount_min[]" value="<?php echo $discount['min'];?>" required >
-                <label>Max Amount:</label> <input type="text" placeholder="Max Amount" name="discount_max[]" value="<?php echo $discount['max'];?>" required >
-                <label>Discount Amount:</label> <input type="text" placeholder="Discount" name="discount_amount[]" value="<?php echo $discount['amount'];?>" required >
+                <label>Min Amount:</label> <input type="text" placeholder="Min Amount" name="discount_min[]" value="<?php echo $discount['min'];?>" class='dc-numberonly' required >
+                <label>Max Amount:</label> <input type="text" placeholder="Max Amount" name="discount_max[]" value="<?php echo $discount['max'];?>" class='dc-numberonly' required >
+                <label>Discount Amount:</label> <input type="text" placeholder="Discount" name="discount_amount[]" value="<?php echo $discount['amount'];?>" class='dc-numberonly' required >
                 <button type="button" class="button delete-discount">Delete</button>
             </p>
         </div>
 
 
-        <?php } ?>
+        <?php } } ?>
 
 </div>
 
