@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define("DC_ASSETS_PATH", plugin_dir_url(__FILE__) . "assets/");
-define('DC_VIEWS_DIR', plugin_dir_path(__FILE__) . "views/");
-define('DC_BASE_DIR', plugin_dir_path(__FILE__));
+define("WDC_ASSETS_PATH", plugin_dir_url(__FILE__) . "assets/");
+define('WDC_VIEWS_DIR', plugin_dir_path(__FILE__) . "views/");
+define('WDC_BASE_DIR', plugin_dir_path(__FILE__));
 
 /**
  * Check if WooCommerce is active

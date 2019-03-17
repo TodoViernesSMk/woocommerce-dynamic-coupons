@@ -10,9 +10,9 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Class DynamicCoupons
+ * Class WDC_DynamicCoupons
  */
-class DynamicCoupons
+class WDC_DynamicCoupons
 {
 
 
@@ -60,8 +60,8 @@ class DynamicCoupons
      */
     public function register_admin_assets()
     {
-        wp_enqueue_script('dc-admin', DC_ASSETS_PATH . 'js/admin.js', array('jquery'), '1.0.0', true);
-        wp_enqueue_style('dc-admin', DC_ASSETS_PATH . 'css/admin.css', array(), '1.0.0');
+        wp_enqueue_script('dc-admin', WDC_ASSETS_PATH . 'js/admin.js', array('jquery'), '1.0.0', true);
+        wp_enqueue_style('dc-admin', WDC_ASSETS_PATH . 'css/admin.css', array(), '1.0.0');
 
     }
 
@@ -285,7 +285,7 @@ class DynamicCoupons
         $discounts = get_post_meta($post->ID, 'dynamic_discounts', true);
 
 
-        include(DC_VIEWS_DIR . "metabox.php");
+        include(WDC_VIEWS_DIR . "metabox.php");
     }
 
     /**
@@ -378,4 +378,4 @@ class DynamicCoupons
 
 }
 
-$dynamic_coupons = new DynamicCoupons();
+$dynamic_coupons = new WDC_DynamicCoupons();
